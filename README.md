@@ -1,5 +1,7 @@
 # threestudio-mvdream
-![mvdream](https://github.com/DSaurus/threestudio-mvdream/assets/24589363/b21e2a80-7ea9-4add-890e-0395b91aa5af)
+| MVDream | DMTet Refine |
+| - | - |
+| ![mvdream](https://github.com/huanngzh/threestudio-mvdream/assets/78398294/74246b6a-7c7a-40d5-9d0c-eb5fc79535fe) | ![mvdream_refined](https://github.com/huanngzh/threestudio-mvdream/assets/78398294/1b919fd4-39ca-44e0-abe7-e86a51872525) |
 
 The MVDream extension for threestudio. The original implementation can be found at https://github.com/bytedance/MVDream-threestudio. We thank them for their contribution to the 3D generation community. To use it, please install [threestudio](https://github.com/threestudio-project/threestudio) first and then install this extension in threestudio `custom` directory.
 
@@ -12,12 +14,17 @@ pip install -r requirements.txt
 ```
 
 # Quick Start
-```
+```bash
 # MVDream without shading (memory efficient)
 python launch.py --config custom/threestudio-mvdream/configs/mvdream-sd21.yaml --train --gpu 0 system.prompt_processor.prompt="an astronaut riding a horse"
 
 # MVDream with shading (used in paper)
 python launch.py --config custom/threestudio-mvdream/configs/mvdream-sd21-shading.yaml --train --gpu 0 system.prompt_processor.prompt="an astronaut riding a horse"
+
+# MVDream with DMTet refine
+python launch.py --config custom/threestudio-mvdream/configs/mvdream-sd21-refine.yaml --train --gpu 0 system.prompt_processor.prompt="an astronaut riding a horse" system.geometry_convert_from=outputs/mvdream-sd21-rescale0.5-shading/an_astronaut_riding_a_horse@20231226-141418/ckpts/last.ckpt
+# !!! Change geometry_convert_from to your ckpt path
+# Try to set isosurface_resolution to 256 and generate 256_tets.npz using load/tets/generate_tets.py for better refinement.
 ```
 
 # Resume from checkpoints

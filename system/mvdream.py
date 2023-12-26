@@ -81,6 +81,26 @@ class MVDreamSystem(BaseLift3DSystem):
             self.log("train/loss_eikonal", loss_eikonal)
             loss += loss_eikonal * self.C(self.cfg.loss.lambda_eikonal)
 
+        if (
+            hasattr(self.cfg.loss, "lambda_normal_consistency")
+            and self.C(self.cfg.loss.lambda_normal_consistency) > 0
+        ):
+            loss_normal_consistency = out["mesh"].normal_consistency()
+            self.log("train/loss_normal_consistency", loss_normal_consistency)
+            loss += loss_normal_consistency * self.C(
+                self.cfg.loss.lambda_normal_consistency
+            )
+
+        if (
+            hasattr(self.cfg.loss, "lambda_laplacian_smoothness")
+            and self.C(self.cfg.loss.lambda_laplacian_smoothness) > 0
+        ):
+            loss_laplacian_smoothness = out["mesh"].laplacian()
+            self.log("train/loss_laplacian_smoothness", loss_laplacian_smoothness)
+            loss += loss_laplacian_smoothness * self.C(
+                self.cfg.loss.lambda_laplacian_smoothness
+            )
+
         for name, value in self.cfg.loss.items():
             self.log(f"train_params/{name}", self.C(value))
 
